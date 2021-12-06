@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ course.name }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="d-flex row p-2 justify-content-center">
+            <div class=" col-md-5 p-4 m-3 bg-light rounded">
+                <h2>{{ course.name }}</h2>
+                <p>{{ course.description }}</p>
+                <hr/>
+                <h4>Enrolled Students:</h4>
+                <ul>{% if students %}
+                    {% for student in students %}
+                        <li>{{ student.user.get_full_name }} - {{ student.department }} {{ student.group_number }}</li>
+                    {% endfor %}
+                {% else %}
+                    <p>No enrolled students yet!</p>
+                {% endif %}
+                </ul>
+                <hr/>
+                <h4>Search Students</h4>
+                {% if dep_form %}
+                    <form method="post" name="department-form">
+                        {% csrf_token %}
+                        {{ dep_form|crispy }}
+                        <button type="submit" class="btn btn-primary">Get list of students from department</button>
+                    </form>
+                {% endif %}
+                <hr/>
+                {% if dep_students %}
+                    <form method="post" name="invite-form">
+                        {% csrf_token %}
+                        <div class="mt-3">
+                            <h4>Invite Students</h4>
+                            <div class="form-check m-3">
+                                {% for student in dep_students %}
+                                    <input type="checkbox" id="{{ student.id }}" name="invite-{{ student.id }}"
+                                           value="{{ student.id }}"
+                                           class="form-check-input">
+                                    <label for="{{ student.id }}"
+                                           class="form-check-label">{{ student.user.get_full_name }}
+                                        - {{ student.department }} {{ student.group_number }}</label>
+                                    <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    <button type="submit" class="btn btn-warning">Invite to the course</button>
+                    </form>
+                    <hr/>
+                {% endif %}
+                <h4>Current Tasks:</h4>
+                <ul>{% if tasks %}
+                    {% for task in tasks %}
+                        <li>{{ task.title }}</li>
+                    {% endfor %}
+                {% else %}
+                    <p>No active tasks</p>
+                {% endif %}
+                </ul>
+                <form name="create-task" action="{% url 'create-task' course_id=course.id %}">
+                    {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Create new task</button>
+                    </form>
+                <hr/>
+            </div>
+        </div>
+    </div>
+{% endblock %}

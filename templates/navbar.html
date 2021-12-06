@@ -1,0 +1,62 @@
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" class="bi bi-mortarboard mr-2" viewBox="0 0 16 16" <a href="{% url "home" %}"></a>
+  <path fill-rule="evenodd" d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5ZM8 8.46 1.758 5.965 8 3.052l6.242 2.913L8 8.46Zm-3.824.57a.5.5 0 0 0-.656.328l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Zm-.068 1.874.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46l-3.892-1.556Z"/>
+</svg>
+  <a class="navbar-brand" href={% url "home" %}>Study.NAU</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url "home" %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url "dashboard" %}">Dashboard</a>
+      </li>
+    </ul>
+      <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+              {% if user.tutor %}
+                              <li class="nav-item">
+                <img class="rounded-circle mr-2" src="{{ user.tutor.photo.url }}"
+                                    class="rounded-circle z-depth-0"
+                                    alt="avatar image"
+                                    height="40" data-holder-rendered="true">
+              </li>
+
+              {% elif user.student%}
+              <li class="nav-item">
+                <img class="rounded-circle mr-2" src="{{ user.student.photo.url }}"
+                                    class="rounded-circle z-depth-0"
+                                    alt="avatar image"
+                                    height="40" data-holder-rendered="true">
+              </li>
+              {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "profile" %}">{{ user.get_full_name }}</a>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url "logout-custom" %}">Logout</a>
+            </li>
+          {% else %}
+          <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" href="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Sign Up
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="{% url "signup" role="student" %}">As a student</a>
+          <a class="dropdown-item" href="{% url "signup" role="mentor" %}">As a mentor</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href={% url "login" %}>Login</a>
+      </li>
+          {% endif %}
+    </ul>
+  </div>
+</nav>

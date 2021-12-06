@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Task{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="d-flex row p-2 justify-content-center">
+            <div class=" col-md-6 p-4 m-3 bg-light rounded">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary">Create Task</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

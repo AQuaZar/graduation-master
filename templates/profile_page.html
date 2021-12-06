@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block head_title %}{{ user.username }}{% endblock head_title %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+  <div class="row">
+    <div class="card col-lg-6 offset-lg-3">
+      <div class="row">
+        {% if user.tutor.photo %}
+        <img class="card-img-top col-sm-3 col-4 my-3"  src="{{ user.tutor.photo.url }}" alt="{{ user.username }}" style="height: 15vw;
+    object-fit: scale-down;">
+            {% elif user.student.photo %}
+            <img class="card-img-top col-sm-3 col-4 my-3" src="{{ user.student.photo.url }}" alt="{{ user.username }}" style="height: 15vw;
+    object-fit: scale-down;">
+        {% endif %}
+        <div class="card-body col-9">
+          <h2 class="card-title my-3">{{ user.get_full_name }}</h2>
+        <p>Username: {{ user.username }}</p>
+
+          <p>Last login on: {{ user.last_login }}</p>
+            {% if user.tutor %}
+          <p class="card-text">Position: {{ user.tutor.position }}</p>
+                        <p>Email: {{ user.tutor.email }}</p>
+                {% elif user.student %}
+                <p class="card-text">Department: {{ user.student.department }}</p>
+                <p>Email: {{ user.student.email }}</p>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

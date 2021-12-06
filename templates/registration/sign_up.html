@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+    <div class=" row d-flex p-2 justify-content-center align-items-center">
+        <p class="col-md-3">Sign Up as a {{ role }}</p>
+        <div class="col-md-3 pt-3 pb-3">
+            <form enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                {{ user_form|crispy }}
+                {{ profile_form|crispy }}
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create New Course{% endblock %}
+
+{% block content %}
+    {% if user.tutor %}
+    <div class=" row d-flex p-2 justify-content-center align-items-center">
+        <div class="col-md-3 pt-5">
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary">Create Course</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+        <p>
+        Sorry, only tutors can create courses.
+        </p>
+    {% endif %}
+{% endblock %}
