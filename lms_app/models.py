@@ -147,10 +147,13 @@ class Task(models.Model):
     deadline = models.DateTimeField()
     max_grade = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    file = models.FileField('Document', upload_to='task_docs/', blank=True)
 
     def __str__(self):
         return f"{self.title}"
+
+class TaskFile(models.Model):
+    file = models.FileField(upload_to="task_docs")
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
 
 class Enrollment(models.Model):

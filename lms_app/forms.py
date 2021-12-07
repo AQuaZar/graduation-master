@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Student, Tutor, Course, Task
+from .models import Student, Tutor, Course, Task, TaskFile
 
 
 class DateInput(forms.DateInput):
@@ -44,11 +44,19 @@ class DepartmentsChoiceForm(forms.ModelForm):
 
 class TaskCreationForm(forms.ModelForm):
     course = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
 
     class Meta:
         model = Task
         fields = ('title', 'type', 'content', 'deadline', 'max_grade')
         widgets = {
             'deadline': DateInput(),
+        }
+
+
+class TaskFileForm(forms.ModelForm):
+    class Meta:
+        model = TaskFile
+        fields = ['file']
+        widgets = {
+            'file': forms.ClearableFileInput(attrs={'multiple': True}),
         }

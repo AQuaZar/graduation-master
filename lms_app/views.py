@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect, resolve_url
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from lms_app.forms import UserForm, StudentForm, MentorForm, CourseCreationForm, DepartmentsChoiceForm, TaskCreationForm
+from lms_app.forms import UserForm, StudentForm, MentorForm, CourseCreationForm, DepartmentsChoiceForm, TaskCreationForm, TaskFileForm
 from django.db import transaction
-from .models import Course, Tutor, Student, User, Enrollment, Invites, Task
+from .models import Course, Tutor, Student, User, Enrollment, Invites, Task, TaskFile
 from django.http import HttpResponseNotFound
 from django.contrib import messages
 # Create your views here.
@@ -160,14 +160,20 @@ def process_invite(request):
 def create_task(request, course_id):
     if request.method=="GET":
         task_creation_form = TaskCreationForm()
-        return render(request, 'course_creation.html', context={"form":task_creation_form})
+        task_file_form = TaskFileForm()
+        return render(request, 'task_creation_page.html', context={"form": task_creation_form, "file_form": task_file_form})
     else:
         course = Course.objects.get(id=course_id)
-        task_creation_form = TaskCreationForm(request.POST, files=request.FILES, initial={"course":course})
-        if task_creation_form.is_valid():
+        task_creation_form = TaskCreationForm(request.POST,  initial={"course": course})
+        task_file_form = TaskFileForm(request.POST, files=request.FILES)
+        files = request.FILES.getlist('file')
+        if task_creation_form.is_valid() and task_file_form.is_valid():
             task = task_creation_form.save(commit=False)
             task.course = course
             task.save()
+            for f in files:
+                file_instance = TaskFile(file=f, task=task)
+                file_instance.save()
         return redirect(resolve_url('dashboard'))
 
         # if course_creation_form.is_valid():

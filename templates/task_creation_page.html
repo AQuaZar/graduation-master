@@ -10,6 +10,7 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form|crispy }}
+                    {{ file_form|crispy }}
                     <button type="submit" class="btn btn-primary">Create Task</button>
                 </form>
             </div>
