@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from PIL import Image
+from .nlp import get_sentences
 
 DEPARTMENT_CHOICES = [
     ('feba', 'FEBA'),
@@ -19,9 +20,9 @@ DEPARTMENT_CHOICES = [
 ]
 
 TASK_CHOICES = [
-    ('QUIZ', 'quiz'),
-    ('BASE', 'basic'),
-    ('MOD', 'module'),
+    ('TEST', 'New Test Package'),
+    ('XTEST', 'Existing Test'),
+    ('BASE', 'Basic'),
 ]
 
 # Create your models here.
@@ -138,6 +139,11 @@ class Course(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+class TestPackage(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return str(self.name)
 
 class Task(models.Model):
     title = models.CharField(max_length=50)
@@ -147,13 +153,30 @@ class Task(models.Model):
     deadline = models.DateTimeField()
     max_grade = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    test_package = models.ForeignKey(TestPackage, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.title}"
 
+
 class TaskFile(models.Model):
     file = models.FileField(upload_to="task_docs")
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+
+class TestQuestion(models.Model):
+    test_package = models.ForeignKey(TestPackage, on_delete=models.CASCADE)
+    question = models.CharField(max_length=400)
+    answer_variants = models.CharField(max_length=400)
+    answer = models.CharField(max_length=100)
+
+
+    @property
+    def variants_list(self):
+        return get_sentences(self.answer_variants)
+
+    def is_correct_answer(self, user_answer):
+        return user_answer.strip().lower() == self.answer.strip().lower()
 
 
 class Enrollment(models.Model):

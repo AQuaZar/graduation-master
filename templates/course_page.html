@@ -19,6 +19,7 @@
                     <p>No enrolled students yet!</p>
                 {% endif %}
                 </ul>
+                {% if toEdit %}
                 <hr/>
                 <h4>Search Students</h4>
                 {% if dep_form %}
@@ -50,20 +51,24 @@
                     </form>
                     <hr/>
                 {% endif %}
+            {% endif %}
                 <h4>Current Tasks:</h4>
                 <ul>{% if tasks %}
                     {% for task in tasks %}
-                        <li>{{ task.title }}</li>
+                        <li><a href="{% url 'task-page' username=course.created_by.user.username course_id=course.id task_id=task.id %}">{{ task.title }}</a></li>
                     {% endfor %}
                 {% else %}
                     <p>No active tasks</p>
                 {% endif %}
                 </ul>
+            {% if toEdit %}
                 <form name="create-task" action="{% url 'create-task' course_id=course.id %}">
                     {% csrf_token %}
+                    {{ task_type_form|crispy }}
                 <button type="submit" class="btn btn-danger">Create new task</button>
                     </form>
                 <hr/>
+            {% endif %}
             </div>
         </div>
     </div>

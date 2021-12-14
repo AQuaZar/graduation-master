@@ -12,5 +12,7 @@ urlpatterns = [
     path('courses/<str:username>/<int:id>', views.course_page_view, name='course_page'),
     path('accounts/profile/', views.profile_page_view, name='profile'),
     path('process-invite/', views.process_invite, name='process-invite'),
-    path('create-task/<int:course_id>', views.create_task, name='create-task')
+    path('create-task/<int:course_id>', views.create_task, name='create-task'),
+    path('courses/<str:username>/<int:course_id>/<int:task_id>/', views.task_page_view, name='task-page'),
+    path('create-test-package/', views.create_test_package, name='create-test-package')
 ]

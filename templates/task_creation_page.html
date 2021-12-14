@@ -9,9 +9,15 @@
             <div class=" col-md-6 p-4 m-3 bg-light rounded">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ form|crispy }}
+                    {% if task_info_form %}
+                    {{ task_info_form|crispy }}
+                    <button type="submit" class="btn btn-primary">Send Values</button>
+                    {% else %}
+                        {{ form|crispy }}
                     {{ file_form|crispy }}
+                    {{ test_task_form|crispy }}
                     <button type="submit" class="btn btn-primary">Create Task</button>
+                    {% endif %}
                 </form>
             </div>
         </div>

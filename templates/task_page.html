@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ task.title }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="d-flex row p-2 justify-content-center">
+            <div class=" col-md-5 p-4 m-3 bg-light rounded">
+                <h2>{{ task.title }}</h2>
+            </div>
+        </div>
+    </div>
+{% endblock %}
