@@ -201,6 +201,17 @@ def create_task(request, course_id):
             answer_variants_amount = request.POST.get("answer_variants_amount")
             questions_list = request.POST.get("questions_list")
             if questions_amount and answer_variants_amount:
+                if int(questions_amount) < 1:
+                    messages.error(request, "Questions amount cannot be less than 1!")
+                    task_info_form = TestTaskInfoForm()
+                    return render(request, 'task_creation_page.html',
+                                  context={"task_info_form": task_info_form})
+                if int(answer_variants_amount) < 1:
+                    messages.error(request, "Question variants amount cannot be less than 1!")
+                    task_info_form = TestTaskInfoForm()
+                    return render(request, 'task_creation_page.html',
+                                  context={"task_info_form": task_info_form})
+
                 if questions_list:
                     questions = get_sentences(questions_list)
                 else:

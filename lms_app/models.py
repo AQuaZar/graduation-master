@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from PIL import Image
 from .nlp import get_sentences
+import os
 
 DEPARTMENT_CHOICES = [
     ('feba', 'FEBA'),
@@ -42,7 +43,10 @@ class Student(models.Model):
     def save(self, *args, **kwargs):
         super().save()
         if self.photo:
-            img = Image.open(self.photo.path)
+            try:
+                img = Image.open(self.photo.path)
+            except FileNotFoundError:
+                img = Image.open(os.path.abspath("./anon.png"))
             width, height = img.size  # Get dimensions
 
             if width > 300 and height > 300:
@@ -84,7 +88,10 @@ class Tutor(models.Model):
     def save(self, *args, **kwargs):
         super().save()
         if self.photo:
-            img = Image.open(self.photo.path)
+            try:
+                img = Image.open(self.photo.path)
+            except FileNotFoundError:
+                img = Image.open(os.path.abspath("./anon.png"))
             width, height = img.size  # Get dimensions
 
             if width > 300 and height > 300:
@@ -141,6 +148,7 @@ class Course(models.Model):
 
 class TestPackage(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    created_by = models.ForeignKey(Tutor, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.name)

@@ -54,10 +54,11 @@ class TaskCreationForm(forms.ModelForm):
 
 class TestTaskCreationForm(forms.ModelForm):
     course = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    test_package = forms.ModelMultipleChoiceField(queryset=TestPackage.objects.all())
 
     class Meta:
         model = Task
-        fields = ('title', 'content', 'deadline', 'max_grade', 'test_package')
+        fields = ('title', 'content', 'deadline', 'max_grade')
         widgets = {
             'deadline': DateInput(),
         }
