@@ -46,7 +46,7 @@ class Student(models.Model):
             try:
                 img = Image.open(self.photo.path)
             except FileNotFoundError:
-                img = Image.open(os.path.abspath("./anon.png"))
+                img = Image.open(os.path.abspath("lms_app/anon.jpeg"))
             width, height = img.size  # Get dimensions
 
             if width > 300 and height > 300:
@@ -91,7 +91,7 @@ class Tutor(models.Model):
             try:
                 img = Image.open(self.photo.path)
             except FileNotFoundError:
-                img = Image.open(os.path.abspath("./anon.png"))
+                img = Image.open(os.path.abspath("lms_app/anon.jpeg"))
             width, height = img.size  # Get dimensions
 
             if width > 300 and height > 300:

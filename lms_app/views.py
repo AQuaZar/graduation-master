@@ -232,7 +232,7 @@ def create_task(request, course_id):
 def create_test_package(request):
     name = request.POST.get('test_package_name')
     # course_id = request.POST.get('course_id')
-    test_package = TestPackage(name=name)
+    test_package = TestPackage(name=name, created_by=request.user.tutor)
     test_package.save()
     r = re.compile("question-[0-9]")
     quest_list = list(filter(r.match, request.POST.keys()))
